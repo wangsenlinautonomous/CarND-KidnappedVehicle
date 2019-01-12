@@ -82,6 +82,8 @@ The following pic can increas your intuition of your idea
 **Predicted measurement** means the predition coordinate based on the **partical position & landmark position**. 
 **Actual measurement** means the real observed measurement
 
+**_The Truth: Abservated landmarks' coordinate VS Predicted landmarks' coordinate_**
+
 <img src="https://user-images.githubusercontent.com/40875720/51070623-42453400-167f-11e9-8c09-3ed8bfa00d82.PNG" width="600">
 
 ### Step 1 : Find out the landmarks in the map which are in the sensors' range
