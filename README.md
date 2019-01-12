@@ -74,7 +74,7 @@ void ParticleFilter::prediction(double delta_t, double std_pos[], double velocit
 ## WeightUpdate
 Weight update is used to update the weight attribute of all the particals. The next steps will use this information to filter out the particals which are far from the real obeservation. This step main contains the following steps:
 * Find out the landmarks in the map which are in the sensors' range
-* Transform vehicle cooridinate to map coordinate
+* Transform vehicle coordinate to map coordinate
 * Associate transformed observations with landmarks
 * Weight update
 
@@ -86,6 +86,7 @@ The following pic can increas your intuition of your idea
 
 <img src="https://user-images.githubusercontent.com/40875720/51070623-42453400-167f-11e9-8c09-3ed8bfa00d82.PNG" width="600">
 
-### Step 1 : Find out the landmarks in the map which are in the sensors' range
-To reduce the compute workload, each partical only cares about the landmark which are in the sensors' range. The following code shows the details of this step. Please pay atension that before coordinate transformation it is also ok to measure the disctance between partical and lanmarks duo the fact that **the partical's position has the map coordinate, only partical's observation need to change the coordinate**.
+### Step 1: Find out the landmarks in the map which are in the sensors' range
+To reduce the compute workload, each partical only cares about the landmark which are in the sensors' range. The following code shows the details of this step. Please pay atension that before coordinate transformation it is also ok to measure the disctance between partical and lanmarks duo the fact that **the partical's position has the map coordinate, only partical's observation need to change the coordinate**. After this step, we get the landmarks on board.
 
+### Step 2: Transform vehicle coordinate to map coordinate
