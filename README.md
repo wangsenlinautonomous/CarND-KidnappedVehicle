@@ -146,3 +146,29 @@ dataAssociation(std::vector<LandmarkObs> predicted, std::vector<LandmarkObs>& ob
 
 ### Step 4: Weight update
 Now we have everything on board to update the weight attribute of the partical filter.
+
+<img src="https://user-images.githubusercontent.com/40875720/51071260-15961a00-1689-11e9-8745-c4404642ac57.PNG" width="600">
+
+```
+//Step 4:Update weights
+//For each particals: (1) Go through each obeservation and calculate weight then product
+for(unsigned int l; l<observations_map.size(); l++)
+{
+  //Prepare for the observation and prediction value
+  double x_obs,y_obs,x_pre,y_pre;
+  x_obs = observations_map[l].x;
+  y_obs = observations_map[l].y;
+  for(unsigned int m; m<landmarkobj_inrange.size(); m++)
+  {
+    if(observations_map[l].id == landmarkobj_inrange[m].id)
+    {
+      x_pre = landmarkobj_inrange[m].x;
+      y_pre = landmarkobj_inrange[m].y;
+    }
+  }
+  // formula of multivariate Gaussian probability
+  double obs_w = (1/(2*M_PI*std_landmark[0]*std_landmark[1])) * exp( -( pow(x_pre-x_obs,2)/(2*pow(std_landmark[0], 2)) + 
+                 (pow(y_pre-y_obs,2)/(2*pow(std_landmark[1], 2)))));
+  particles[i].weight *= obs_w;
+}
+```
