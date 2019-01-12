@@ -89,4 +89,60 @@ The following pic can increas your intuition of your idea
 ### Step 1: Find out the landmarks in the map which are in the sensors' range
 To reduce the compute workload, each partical only cares about the landmark which are in the sensors' range. The following code shows the details of this step. Please pay atension that before coordinate transformation it is also ok to measure the disctance between partical and lanmarks duo the fact that **the partical's position has the map coordinate, only partical's observation need to change the coordinate**. After this step, we get the landmarks on board.
 
+```
+//Step 1:Filter out the landmarks which are in the sensor range
+for(unsigned int k; k<map_landmarks.landmark_list.size(); k++)
+{
+  LandmarkObs filter_range;
+  if(dist(particles[i].x,particles[i].y,map_landmarks.landmark_list[k].x_f,map_landmarks.landmark_list[k].y_f) < sensor_range)
+  {
+    filter_range.x = map_landmarks.landmark_list[k].x_f;
+    filter_range.y = map_landmarks.landmark_list[k].y_f;
+    filter_range.id = map_landmarks.landmark_list[k].id_i;
+    landmarkobj_inrange.push_back(filter_range);
+  }
+}
+```
+
 ### Step 2: Transform vehicle coordinate to map coordinate
+This step is used to transform landmarks' coordinate from vehicle coordinate to map coordinate. Then on the next step the algorithm can calculate the weight.
+
+<img src="https://user-images.githubusercontent.com/40875720/51070860-1b88fc80-1683-11e9-8d71-1b18a2baa46c.PNG" width="600">
+
+```
+//Step 2:Transform coordinate from vehicle to map
+for(unsigned int j=0; j<observations.size(); j++)
+{
+  LandmarkObs coordi_transfer;
+  coordi_transfer.x = particles[i].x + (cos(particles[i].theta) * observations[j].x) - (sin(particles[i].theta) * observations[j].y);
+  coordi_transfer.y = particles[i].y + (sin(particles[i].theta) * observations[j].x) + (cos(particles[i].theta) * observations[j].y);
+  coordi_transfer.id = -1;
+  observations_map.push_back(coordi_transfer);
+}
+```
+
+### Step 3: Associate transformed observations with landmarks
+This step is used to associate the transformed observations with the nearest landmarks. For each observation, partical will loop all the predicted landmark and find out the nearest one to match. Then set the predicted lanmark's id to observated landmark id.
+Till now, we have predicted landmark's coordinate and observed landmarks' coordinate. Also we have their corresponding id. So they are fully aligned.
+
+```
+dataAssociation(std::vector<LandmarkObs> predicted, std::vector<LandmarkObs>& observations) 
+{
+  for(unsigned i=0; i<observations.size(); i++)
+  {
+    double minDist = numeric_limits<double>::max();
+    for(unsigned j=0; j<predicted.size(); j++)
+    {
+      double distance = dist(observations[j].x,observations[j].y,predicted[j].x,predicted[j].y);
+      if(distance<minDist)
+      {
+        minDist = distance;
+        observations[j].id = predicted[j].id;
+      }
+    }
+  }
+}
+```
+
+### Step 4: Weight update
+Now we have everything on board to update the weight attribute of the partical filter.
