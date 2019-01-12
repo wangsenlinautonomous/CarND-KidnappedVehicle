@@ -78,5 +78,12 @@ Weight update is used to update the weight attribute of all the particals. The n
 * Associate transformed observations with landmarks
 * Weight update
 
+The following pic can increas your intuition of your idea
+**Predicted measurement** means the predition coordinate based on the **partical position & landmark position**. 
+**Actual measurement** means the real observed measurement
+
+<img src="https://user-images.githubusercontent.com/40875720/51070623-42453400-167f-11e9-8c09-3ed8bfa00d82.PNG" width="600">
+
 ### Step 1 : Find out the landmarks in the map which are in the sensors' range
 To reduce the compute workload, each partical only cares about the landmark which are in the sensors' range. The following code shows the details of this step. Please pay atension that before coordinate transformation it is also ok to measure the disctance between partical and lanmarks duo the fact that **the partical's position has the map coordinate, only partical's observation need to change the coordinate**.
+
