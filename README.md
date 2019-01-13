@@ -172,3 +172,6 @@ for(unsigned int l; l<observations_map.size(); l++)
   particles[i].weight *= obs_w;
 }
 ```
+
+## Resample
+The final step is resample. Res
