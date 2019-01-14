@@ -192,7 +192,7 @@ for(unsigned int l; l<observations_map.size(); l++)
 }
 ```
 
-## Resample
+### Step 5: Resample 
 The final step is resample. Resample is used to resample all of the particals.
 
 <img src="https://user-images.githubusercontent.com/40875720/51100423-ff1aca80-1810-11e9-80b8-31260b7a2480.PNG" width="600">
