@@ -52,35 +52,38 @@ In this step, each partical will precidit their next position according to Yaw r
 <img src="https://user-images.githubusercontent.com/40875720/51070148-3b1a2800-1677-11e9-81ce-ed06e50370eb.PNG" width="600">
 
 ```
-void ParticleFilter::prediction(double delta_t, double std_pos[], double velocity, double yaw_rate) {
-	// TODO: Add measurements to each particle and add random Gaussian noise.
-	// NOTE: When adding noise you may find std::normal_distribution and std::default_random_engine useful.
-	//  http://en.cppreference.com/w/cpp/numeric/random/normal_distribution
-	//  http://www.cplusplus.com/reference/random/default_random_engine/
+void ParticleFilter::prediction(double delta_t, double std_pos[], double velocity, double yaw_rate)
+{
+  // TODO: Add measurements to each particle and add random Gaussian noise.
+  // NOTE: When adding noise you may find std::normal_distribution and std::default_random_engine useful.
+  // http://en.cppreference.com/w/cpp/numeric/random/normal_distribution
+  // http://www.cplusplus.com/reference/random/default_random_engine/
   
-	//Define normal distribution for GPS x,y and theta, for noise case, the mean value should be 0
-	normal_distribution<double> dist_x(0, std_pos[0]);
-	normal_distribution<double> dist_y(0, std_pos[1]);
-	normal_distribution<double> dist_theta(0, std_pos[2]);
+  //Define normal distribution for GPS x,y and theta, for noise case, the mean value should be 0
+  normal_distribution<double> dist_x(0, std_pos[0]);
+  normal_distribution<double> dist_y(0, std_pos[1]);
+  normal_distribution<double> dist_theta(0, std_pos[2]);
 
-	for(unsigned int i = 0; i < num_particles; i++)
-	{
-		//Try to consider yaw_rate near 0 conditions, in this case fomular can be changed
-		if(fabs(yaw_rate) < 0.00001) {  
-			particles[i].x += velocity * delta_t * cos(particles[i].theta);
-			particles[i].y += velocity * delta_t * sin(particles[i].theta);
-		} 
-		else{
-			particles[i].x += velocity / yaw_rate * (sin(particles[i].theta + yaw_rate*delta_t) - sin(particles[i].theta));
-			particles[i].y += velocity / yaw_rate * (cos(particles[i].theta) - cos(particles[i].theta + yaw_rate*delta_t));
-			particles[i].theta += yaw_rate * delta_t;
-		}
+  for(unsigned int i = 0; i < num_particles; i++)
+  {
+    //Try to consider yaw_rate near 0 conditions, in this case fomular can be changed
+    if(fabs(yaw_rate) < 0.00001) 
+    {  
+      particles[i].x += velocity * delta_t * cos(particles[i].theta);
+      particles[i].y += velocity * delta_t * sin(particles[i].theta);
+    } 
+    else
+    {
+      particles[i].x += velocity / yaw_rate * (sin(particles[i].theta + yaw_rate*delta_t) - sin(particles[i].theta));
+      particles[i].y += velocity / yaw_rate * (cos(particles[i].theta) - cos(particles[i].theta + yaw_rate*delta_t));
+      particles[i].theta += yaw_rate * delta_t;
+    }
 
-		//Add Noise
-		particles[i].x += dist_x(gen);
-		particles[i].y += dist_y(gen);
-		particles[i].theta += dist_theta(gen);
-	}
+    //Add Noise
+    particles[i].x += dist_x(gen);
+    particles[i].y += dist_y(gen);
+    particles[i].theta += dist_theta(gen);
+  }
 }
 ```
 ### Note
